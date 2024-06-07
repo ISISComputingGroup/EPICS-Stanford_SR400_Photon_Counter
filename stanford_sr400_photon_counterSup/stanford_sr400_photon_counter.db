@@ -17,3 +17,59 @@ record(bo, "$(P)DISABLE")
     field(ZNAM, "COMMS ENABLED")
     field(ONAM, "COMMS DISABLED")
 }
+
+# Counter Readbacks
+
+record(ai, "$(P)COUNTER:A:RBV") {
+    field(DESC, "Counter A readback")
+    field(DTYP, "stream")
+    field(SCAN, ".1 second")
+    field(INP,  "@stanford_sr400_photon_counter.proto getCounterA $(PORT)")
+    field(PINI, "YES")
+}
+
+record(ai, "$(P)COUNTER:B:RBV") {
+    field(DESC, "Counter B readback")
+    field(DTYP, "stream")
+    field(SCAN, ".1 second")
+    field(INP,  "@stanford_sr400_photon_counter.proto getCounterB $(PORT)")
+    field(PINI, "YES")
+}
+
+# Buttons
+
+record(bo, "$(P)START_COUNTING") {
+    field(DESC, "Start counting")
+    field(OUT, "@stanford_sr400_photon_counter.proto startCounting $(PORT)")
+    field(DTYP, "stream")
+}
+
+record(bo, "$(P)STOP_COUNTING") {
+    field(DESC, "Stop counting")
+    field(OUT, "@stanford_sr400_photon_counter.proto stopCounting $(PORT)")
+    field(DTYP, "stream")
+}
+
+record(bo, "$(P)RESET_COUNTERS") {
+    field(DESC, "Reset the counters.")
+    field(OUT, "@stanford_sr400_photon_counter.proto resetCounters $(PORT)")
+    field(DTYP, "stream")
+}
+
+# Status
+
+record(mbbiDirect, "$(P)STATUS") {
+    field(DESC, "8-bit status register")
+    field(INP,  "@stanford_sr400_photon_counter.proto getStatusByte $(PORT)")
+    field(DTYP, "stream")
+    field(SCAN, ".5 second")
+    field(PINI, "YES")
+    # bit 0: Parameter Changed from front panel
+    # bit 1: Data Ready
+    # bit 2: Scan Finished
+    # bit 3: Counter Overrun
+    # bit 4: Rate Error
+    # bit 5: Recall Error
+    # bit 6: SRQ
+    # bit 7: Command Error
+}

@@ -1,18 +1,28 @@
-getIDN {
-    out "*IDN?";
-    in "%\$1[^\r\n]";
-    ExtraInput = Ignore;
+Terminator = CR LF;
+
+getStatusByte {
+    out "SS";
+    in "%u";
 }
 
-cmd {
-    out "\$$1";
-}
-
-setD {
-    out "\$1 %d";
-}
-getD {
-    out "\$1?";
+getCounterA {
+    out "QA";
     in "%d";
-    ExtraInput = Ignore;
+}
+
+getCounterB {
+    out "QB";
+    in "%d";
+}
+
+startCounting {
+    out "CS";
+}
+
+stopCounting {
+    out "CH";
+}
+
+resetCounters {
+    out "CR";
 }
