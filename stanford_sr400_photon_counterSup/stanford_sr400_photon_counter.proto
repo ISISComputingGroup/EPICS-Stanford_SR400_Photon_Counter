@@ -1,4 +1,6 @@
-Terminator = CR LF;
+OutTerminator = CR LF;
+InTerminator = CR;
+ReplyTimeout = 2000;
 
 getStatusByte {
     out "SS";
