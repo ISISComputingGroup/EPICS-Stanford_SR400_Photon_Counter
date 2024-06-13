@@ -7,12 +7,19 @@ getStatusByte {
     in "%u";
 }
 
+getSecondaryStatusByte {
+    out "SI";
+    in "%u";
+}
+
 getCounterA {
+    ExtraInput = Ignore;
     out "QA";
     in "%d";
 }
 
 getCounterB {
+    ExtraInput = Ignore;
     out "QB";
     in "%d";
 }
