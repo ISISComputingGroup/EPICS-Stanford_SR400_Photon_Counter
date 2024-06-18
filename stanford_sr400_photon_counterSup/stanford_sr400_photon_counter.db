@@ -1,0 +1,105 @@
+record(bo, "$(P)SIM")
+{
+    field(SCAN, "Passive")
+    field(DTYP, "Soft Channel")
+    field(ZNAM, "NO")
+    field(ONAM, "YES")
+    field(VAL, "$(RECSIM=0)")
+    field(PINI, "YES")
+}
+
+record(bo, "$(P)DISABLE")
+{
+    field(DESC, "Disable comms")
+    field(PINI, "YES")
+    field(VAL, "$(DISABLE=0)")
+    field(OMSL, "supervisory")
+    field(ZNAM, "COMMS ENABLED")
+    field(ONAM, "COMMS DISABLED")
+}
+
+# Counter Readbacks
+
+record(ai, "$(P)COUNTER:A:RBV") {
+    field(DESC, "Counter A readback")
+    field(DTYP, "stream")
+    field(SCAN, "Passive")
+    field(INP,  "@stanford_sr400_photon_counter.proto getCounterA $(PORT)")
+    field(VAL, "0")
+}
+
+record(ai, "$(P)COUNTER:B:RBV") {
+    field(DESC, "Counter B readback")
+    field(DTYP, "stream")
+    field(SCAN, "Passive")
+    field(INP,  "@stanford_sr400_photon_counter.proto getCounterB $(PORT)")
+    field(VAL, "0")
+}
+
+# Buttons
+
+record(bo, "$(P)START_COUNTING") {
+    field(DESC, "Start counting")
+    field(OUT, "@stanford_sr400_photon_counter.proto startCounting $(PORT)")
+    field(DTYP, "stream")
+}
+
+record(bo, "$(P)STOP_COUNTING") {
+    field(DESC, "Stop counting")
+    field(OUT, "@stanford_sr400_photon_counter.proto stopCounting $(PORT)")
+    field(DTYP, "stream")
+}
+
+record(bo, "$(P)RESET_COUNTERS") {
+    field(DESC, "Reset the counters.")
+    field(OUT, "@stanford_sr400_photon_counter.proto resetCounters $(PORT)")
+    field(DTYP, "stream")
+}
+
+# Status
+
+record(mbbiDirect, "$(P)STATUS") {
+    field(DESC, "8-bit status register")
+    field(INP,  "@stanford_sr400_photon_counter.proto getStatusByte $(PORT)")
+    field(DTYP, "stream")
+    field(SCAN, "1 second")
+    # bit 0: Parameter Changed from front panel
+    # bit 1: Data Ready
+    # bit 2: Scan Finished
+    # bit 3: Counter Overrun
+    # bit 4: Rate Error
+    # bit 5: Recall Error
+    # bit 6: SRQ
+    # bit 7: Command Error
+    field(FLNK, "$(P)_CHECK_DATA_READY")
+}
+
+record(mbbiDirect, "$(P)STATUS:SECONDARY") {
+    field(DESC, "3-bit secondary status register")
+    field(INP,  "@stanford_sr400_photon_counter.proto getSecondaryStatusByte $(PORT)")
+    field(DTYP, "stream")
+    field(SCAN, "1 second")
+    # bit 0: Triggered
+    # bit 1: Inhibited
+    # bit 2: Counting
+}
+
+# Check whether counter data is ready or not and then subsequently trigger read if ready.
+
+record(calcout, "$(P)_CHECK_DATA_READY") {
+    field(DESC, "Data Ready status bit")
+    field(CALC, "A")
+    field(INPA, "$(P)STATUS.B1")
+    field(OUT,  "$(P)_READ_COUNTERS.PROC")
+    field(OOPT, "When Non-zero")
+    field(SCAN, "Passive")
+}
+
+record(dfanout, "$(P)_READ_COUNTERS") {
+    field(DESC, "description")
+    field(OUTA, "$(P)COUNTER:A:RBV.PROC")
+    field(OUTB, "$(P)COUNTER:B:RBV.PROC")
+    field(DOL,  "1")
+    field(OMSL, "closed_loop")
+    field(SELM, "All")
+}

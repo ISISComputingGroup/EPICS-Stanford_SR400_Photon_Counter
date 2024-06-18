@@ -1,0 +1,37 @@
+OutTerminator = CR LF;
+InTerminator = CR;
+ReplyTimeout = 2000;
+
+getStatusByte {
+    out "SS";
+    in "%u";
+}
+
+getSecondaryStatusByte {
+    out "SI";
+    in "%u";
+}
+
+getCounterA {
+    ExtraInput = Ignore;
+    out "QA";
+    in "%d";
+}
+
+getCounterB {
+    ExtraInput = Ignore;
+    out "QB";
+    in "%d";
+}
+
+startCounting {
+    out "CS";
+}
+
+stopCounting {
+    out "CH";
+}
+
+resetCounters {
+    out "CR";
+}
