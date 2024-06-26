@@ -12,7 +12,7 @@ class SimulatedStanfordSr400PhotonCounter(StateMachineDevice):
         self.count_a = 0
         self.count_b = 0
         self.counting: bool = False
-        self.status_byte: int = int("00000000", 2) # Each bit in a byte stands for a status bit initially all zero
+        self.status_byte: int = int("00000010", 2) # Each bit in a byte stands for a status bit initially all zero
 
     def _get_state_handlers(self):
         return {
@@ -34,12 +34,12 @@ class SimulatedStanfordSr400PhotonCounter(StateMachineDevice):
 
     def get_count_a(self) -> int:
         if self.counting:
-            self.count_a += random.randint(0, 1)
+            self.count_a += random.randint(10, 15)
         return self.count_a
 
     def get_count_b(self) -> int:
         if self.counting:
-            self.count_b += random.randint(0, 1)
+            self.count_b += random.randint(10, 15)
         return self.count_b
     
     def get_status(self) -> int:
@@ -63,4 +63,4 @@ class SimulatedStanfordSr400PhotonCounter(StateMachineDevice):
         self.count_a = 0
         self.count_b = 0
         self.counting = False
-        self.status_byte = int("00000000", 2)
+        self.status_byte = int("00000010", 2)

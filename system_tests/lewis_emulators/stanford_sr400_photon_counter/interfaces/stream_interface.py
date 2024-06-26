@@ -9,7 +9,7 @@ from ..device import SimulatedStanfordSr400PhotonCounter
 class StanfordSr400PhotonCounterStreamInterface(StreamInterface):
     
     in_terminator = "\r\n"
-    out_terminator = "\r\n"
+    out_terminator = "\r"
 
     def __init__(self):
         super(StanfordSr400PhotonCounterStreamInterface, self).__init__()
@@ -21,6 +21,7 @@ class StanfordSr400PhotonCounterStreamInterface(StreamInterface):
             CmdBuilder(self.reset_counter).escape("CR").eos().build(),
             CmdBuilder(self.get_counter_a).escape("QA").eos().build(),
             CmdBuilder(self.get_counter_b).escape("QB").eos().build(),
+            CmdBuilder(self.get_secondary_status).escape("SI").eos().build(),
         }
 
         self.device: SimulatedStanfordSr400PhotonCounter = self.device
@@ -33,7 +34,10 @@ class StanfordSr400PhotonCounterStreamInterface(StreamInterface):
     
     def get_status(self):
         return self.device.get_status()
-    
+
+    def get_secondary_status(self):
+        return self.device.get_status()
+        
     def start_counting(self):
         self.device.start_counting()
     
