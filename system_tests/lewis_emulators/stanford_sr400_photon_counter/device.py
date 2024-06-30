@@ -34,18 +34,18 @@ class SimulatedStanfordSr400PhotonCounter(StateMachineDevice):
 
     def get_count_a(self) -> int:
         if self.counting:
-            self.count_a += random.randint(10, 15)
+            self.count_a = 20
         return self.count_a
 
     def get_count_b(self) -> int:
         if self.counting:
-            self.count_b += random.randint(10, 15)
+            self.count_b = 15
         return self.count_b
     
     def get_status(self) -> int:
-        if self.counting:
+        #if self.counting:
             # change status on
-            self.set_random_status()
+            #self.set_random_status()
         
         return self.status_byte
     

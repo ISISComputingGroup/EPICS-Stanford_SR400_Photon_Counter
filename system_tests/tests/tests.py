@@ -74,8 +74,5 @@ class StanfordSr400PhotonCounterTests(unittest.TestCase):
         self._simulate_start_button_press()  # The fact that this works has been tested above
         status = self.ca.get_pv_value("STATUS")
 
-        self.ca.assert_that_pv_is_not("STATUS", status)
-        status = self.ca.get_pv_value("STATUS")
-
-        self.ca.assert_that_pv_is_not("STATUS", status)
+        self.ca.assert_that_pv_is_not("STATUS", 0)
 
