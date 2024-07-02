@@ -72,7 +72,12 @@ class StanfordSr400PhotonCounterTests(unittest.TestCase):
 
     def test_status_changes(self):
         self._simulate_start_button_press()  # The fact that this works has been tested above
+        self._lewis.backdoor_set_on_device("status_byte", int("00000100", 2))
+        status = self.ca.get_pv_value("STATUS")
+        self.ca.assert_that_pv_is("STATUS", int("00000100", 2))
+
+        self._lewis.backdoor_set_on_device("status_byte", int("00000010", 2))
         status = self.ca.get_pv_value("STATUS")
 
-        self.ca.assert_that_pv_is_not("STATUS", 0)
+        self.ca.assert_that_pv_is("STATUS", int("00000010", 2))
 
