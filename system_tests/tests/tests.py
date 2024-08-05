@@ -3,9 +3,7 @@ import unittest
 from utils.channel_access import ChannelAccess
 from utils.ioc_launcher import get_default_ioc_dir
 from utils.test_modes import TestModes
-from utils.testing import get_running_lewis_and_ioc, skip_if_recsim
-
-import time
+from utils.testing import get_running_lewis_and_ioc
 
 DEVICE_PREFIX = "SR400_01"
 
@@ -20,15 +18,18 @@ IOCS = [
 ]
 
 
-TEST_MODES = [ TestModes.DEVSIM]
+TEST_MODES = [TestModes.DEVSIM]
 
 
 class StanfordSr400PhotonCounterTests(unittest.TestCase):
     """
     Tests for the _Device_ IOC.
     """
+
     def setUp(self):
-        self._lewis, self._ioc = get_running_lewis_and_ioc("stanford_sr400_photon_counter", DEVICE_PREFIX)
+        self._lewis, self._ioc = get_running_lewis_and_ioc(
+            "stanford_sr400_photon_counter", DEVICE_PREFIX
+        )
         self.ca = ChannelAccess(device_prefix=DEVICE_PREFIX)
 
         self._simulate_restart_button_press()
@@ -41,7 +42,7 @@ class StanfordSr400PhotonCounterTests(unittest.TestCase):
 
     def _simulate_restart_button_press(self):
         self.ca.set_pv_value("RESET_COUNTERS", 1)
-    
+
     def test_counters_start(self):
         self.ca.assert_that_pv_is("COUNTER:A:RBV", 0, timeout=2)
         self.ca.assert_that_pv_is("COUNTER:B:RBV", 0, timeout=2)
@@ -50,7 +51,7 @@ class StanfordSr400PhotonCounterTests(unittest.TestCase):
 
         self.ca.assert_that_pv_is_not("COUNTER:A:RBV", 0, timeout=2)
         self.ca.assert_that_pv_is_not("COUNTER:B:RBV", 0, timeout=2)
-    
+
     def test_counters_stop(self):
         self._simulate_start_button_press()  # The fact that this works has been tested above
 
@@ -80,4 +81,3 @@ class StanfordSr400PhotonCounterTests(unittest.TestCase):
         status = self.ca.get_pv_value("STATUS")
 
         self.ca.assert_that_pv_is("STATUS", int("00000010", 2))
-

@@ -1,13 +1,12 @@
-from lewis.adapters.stream import StreamInterface, Cmd
-from lewis.utils.command_builder import CmdBuilder
+from lewis.adapters.stream import StreamInterface
 from lewis.core.logging import has_log
-from lewis.utils.replies import conditional_reply
+from lewis.utils.command_builder import CmdBuilder
 
 from ..device import SimulatedStanfordSr400PhotonCounter
 
+
 @has_log
 class StanfordSr400PhotonCounterStreamInterface(StreamInterface):
-    
     in_terminator = "\r\n"
     out_terminator = "\r"
 
@@ -28,25 +27,25 @@ class StanfordSr400PhotonCounterStreamInterface(StreamInterface):
 
     def get_counter_a(self) -> int:
         return self.device.get_count_a()
-    
+
     def get_counter_b(self) -> int:
         return self.device.get_count_b()
-    
+
     def get_status(self):
         return self.device.get_status()
 
     def get_secondary_status(self):
         return self.device.get_status()
-        
+
     def start_counting(self):
         self.device.start_counting()
-    
+
     def stop_counting(self):
         self.device.stop_counting()
 
     def reset_counter(self):
         self.device.reset_counter()
-    
+
     def handle_error(self, request, error):
         """
         If command is not recognised print and error
