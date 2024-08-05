@@ -6,7 +6,6 @@ from .states import DefaultState
 
 
 class SimulatedStanfordSr400PhotonCounter(StateMachineDevice):
-
     def _initialize_data(self):
         """
         Initialize all of the device's attributes.
@@ -18,11 +17,11 @@ class SimulatedStanfordSr400PhotonCounter(StateMachineDevice):
 
     def _get_state_handlers(self):
         return {
-            'default': DefaultState(),
+            "default": DefaultState(),
         }
 
     def _get_initial_state(self):
-        return 'default'
+        return "default"
 
     def _get_transition_handlers(self):
         return OrderedDict([])
@@ -36,15 +35,15 @@ class SimulatedStanfordSr400PhotonCounter(StateMachineDevice):
         if self.counting:
             self.count_b = 15
         return self.count_b
-    
+
     def get_status(self) -> int:
         return self.status_byte
-    
+
     def start_counting(self) -> None:
         self.counting = True
 
     def stop_counting(self) -> None:
-        # if this is called twice consequitively reset
+        # if this is called twice consequitively reset
         if self.counting:
             self.counting = False
         else:
